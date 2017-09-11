@@ -1,0 +1,83 @@
+/* Frederick Ngo
+ * Week 3 Algorithms
+ */
+ 
+
+  public class Point implements Comparable<Point>
+  {
+    public int compareTo(Point that) // compare two points by y-coordinates, breaking ties by x-coordinates
+    {
+      if(y > that.y) return 1;
+      if(y < that.y) return -1;
+      if(x > that.x) return 1;
+      if(x < that.x) return -1;
+      return 0;
+    }
+    public double slopeTo (Point that) // the slope between this slope and that point
+    {
+      if (compareTo(that) == 0) return Double.NEGATIVE_INFINITY;
+      if (y - that.y == 0) return Double.POSITIVE_INFINITY;
+      if (x - that.x == 0) return 0; // for pos/neg 0 cases
+      return (y - that.y)/(x - that.x);
+    }
+    public Comparator<Point> slopeOrder() // compare two points by slope they make with this point
+    {
+      return new Comparator<Point>() {
+        private int compareTo (Point a, Point b) {
+          if (a.slopeTo(this.Point) > b.slopeTo(this.Point)) return 1;
+        if (b.slopeTo(this.Point) > a.slopeTo(this.Point)) return -1;
+        return 0;
+        }
+      };
+    }
+   
+public class BruteCollinearPoints{
+    private int number;
+    public BruteCollinearPoints(Point[] points) // finds all line segments containing 4 points
+    {
+      number = 0;
+   
+      Points[] order = new Points[points.length];
+      //sort the points -- need to exchange!!
+      for(int c = 0; c < points.size; c++)
+      {
+        for(int i = 0; i < points.size; i++)
+        {
+          int min = i;
+          if (points[i] < points[min]) min = i;
+        }
+        order[c] = points[min];
+      }
+      for(int a = 0; a < points.size; a++) // need to change all the points to order
+        if(points[a] == null) throw new NullPointerException();
+      for(int i = 0; i < points.size; i++)
+      {
+        for(int j = i +1; j < points.size; j++)
+        {
+          for(int k = j+1; k < points.size; k++)
+          {
+            for(int l = k+1; l < points.size; l++)
+            {
+              double slope1 = points[l].slopeTo(points[k]);
+              double slope2 = points[l].slopeTo(points[j]);
+              double slope3 = points[l].slopeTo(points[i]);
+              if(slope1 == slope2 && slope1 == slope3)  number++;
+            }
+          }
+        }
+      }       
+    }
+    private static void exch(Comparator a, int i, int j) // unsure where this should be
+    {
+      Comparator swap = a[i];
+      a[i] = a[j];
+      a[j] = swap;
+    }
+    public int numberOfSegments() // the number of line segments
+    { return number; }
+    public LineSegment[] segments() // the line segments
+    {
+      
+    }
+  }
+}
